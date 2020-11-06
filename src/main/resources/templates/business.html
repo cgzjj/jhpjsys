@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>综合应用平台业务办理界面</title>
+</head>
+<script src="/js/vue.js"></script>
+<script src="/js/axios.min.js"></script>
+<body>
+综合应用平台业务办理界面
+<br>
+<div id="queue">
+    <!-- 叫号 -->
+    <!--<form target="new" id="form1" name="form1" action="/user/action" method="post">-->
+        <!--<input type="hidden" id = "onType" name = "onType" value="TMRI_CALLOUT"/>-->
+        <!--<input type="hidden" id="reqdata" name = "reqdata" value="base64 编码报文数据">-->
+        <!--<input type="hidden" id="charset" name = "charset" value="utf-8">-->
+        <!--<button type="submit" @click="tmri_callout">叫号</button>-->
+    <!--</form>-->
+    <button v-on:click="tmri_callout">叫号</button>
+   <!-- 再次叫号-->
+    <form target="new" id="form2" name="form2" action="/user/action" method="post">
+        <input type="hidden" id = "onType" name = "onType" value="TMRI_RECALL"/>
+        <input type="hidden" id="reqdata" name = "reqdata" value="base64 编码报文数据">
+        <input type="hidden" id="charset" name = "charset" value="utf-8">
+        <button type="submit">再次叫号</button>
+    </form>
+  <!--  过号-->
+    <form target="new" id="form3" name="form3" action="/user/action" method="post">
+        <input type="hidden" id = "onType" name = "onType" value="TMRI_SKIP"/>
+        <input type="hidden" id="reqdata" name = "reqdata" value="base64 编码报文数据">
+        <input type="hidden" id="charset" name = "charset" value="utf-8">
+        <button type="submit">过号</button>
+    </form>
+   <!-- 提请评价-->
+    <form target="new" id="form4" name="form4" action="/user/action" method="post">
+        <input type="hidden" id = "onType" name = "onType" value="TMRI_EVALUATION"/>
+        <input type="hidden" id="reqdata" name = "reqdata" value="base64 编码报文数据">
+        <input type="hidden" id="charset" name = "charset" value="utf-8">
+        <button type="submit">提请评价</button>
+    </form>
+    <!--暂停叫号-->
+    <form target="new" id="form5" name="form5" action="/user/action" method="post">
+        <input type="hidden" id = "onType" name = "onType" value="TMRI_SUSPEND"/>
+        <input type="hidden" id="reqdata" name = "reqdata" value="base64 编码报文数据">
+        <input type="hidden" id="charset" name = "charset" value="utf-8">
+        <button type="submit">暂停叫号</button>
+    </form>
+    <!--恢复叫号-->
+    <form target="new" id="form6" name="form6" action="/user/action" method="post">
+        <input type="hidden" id = "onType" name = "onType" value="TMRI_RECOVER"/>
+        <input type="hidden" id="reqdata" name = "reqdata" value="base64 编码报文数据">
+        <input type="hidden" id="charset" name = "charset" value="utf-8">
+        <button type="submit">恢复叫号</button>
+    </form>
+    <!--待领取牌证信息写入-->
+    <form target="new" id="form7" name="form7" action="/user/action" method="post">
+        <input type="hidden" id = "onType" name = "onType" value="TMRI_RECEIVE"/>
+        <input type="hidden" id="reqdata" name = "reqdata" value="base64 编码报文数据">
+        <input type="hidden" id="charset" name = "charset" value="utf-8">
+        <button type="submit">待领取牌证信息写入</button>
+    </form>
+
+</div>
+</body>
+      <script>
+          var queueItem = new Vue({
+              el : "#queue",
+              data:{},
+              methods:{
+                  tmri_callout:function () {
+                      var params = new URLSearchParams();
+                      params.append("onType","TMRI_CALLOUT");
+                      params.append("reqdata","base64 编码报文数据");
+                      params.append("charset","utf-8");
+                      axios.post('http://192.168.101.108:8080/user/action',params)
+                          .then(function (res) {
+                              console.log(res);
+                          })
+                  }
+              }
+          })
+      </script>
+
+</html>

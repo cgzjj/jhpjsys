@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<!--这里action的地址先随意写一个，后面我们去配置-->
+<form action="/login_validate" method="post">
+    账户：<br>
+    <input type="text" id="username" name="username" /><br>
+    密码：<br>
+    <input type="password" id="password" name="password"><br>
+    <br>
+    <button type="submit">登录</button>
+</form>
+</body>
+</html>
