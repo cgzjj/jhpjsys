@@ -1,20 +1,14 @@
 package cn.com.hyxc.hcpmidsys.modulelogin.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.http.HttpRequest;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * 综合应用平台模拟接口
@@ -35,7 +29,6 @@ public class SimulaController {
         jsonObject.put("onType",request.getParameter("onType"));
         jsonObject.put("reqdata",request.getParameter("reqdata"));
         jsonObject.put("charset",request.getParameter("charset"));
-
         HttpURLConnection conn = null;
         try {
             URL url = new URL("http://192.168.101.108:8080/user/action");
@@ -61,6 +54,4 @@ public class SimulaController {
                 conn.disconnect();
         }
     }
-
-
 }
