@@ -18,8 +18,6 @@ import java.net.URL;
  */
 @RestController
 public class SimulaController {
-
-
     @RequestMapping(value = "/user/action", method = RequestMethod.POST)
     public void action(HttpServletRequest request) {
         System.out.println(" 类型 : " + request.getParameter("onType"));
@@ -30,6 +28,7 @@ public class SimulaController {
         jsonObject.put("reqdata",request.getParameter("reqdata"));
         jsonObject.put("charset",request.getParameter("charset"));
         HttpURLConnection conn = null;
+
         try {
             URL url = new URL("http://192.168.101.108:8080/user/action");
             conn = (HttpURLConnection) url.openConnection();
