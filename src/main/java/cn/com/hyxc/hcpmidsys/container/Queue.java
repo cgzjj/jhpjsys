@@ -21,7 +21,7 @@ public class Queue {
     /*
      * 业务类别
      */
-    private String lwlb;
+    private String ywlb;
     /*
      * 身份证名号码
      */
@@ -68,7 +68,7 @@ public class Queue {
         this.dlrsfzmhm = builder.dlrsfzmhm;
         this.jzbdzp = builder.jzbdzp;
         this.jzzply = builder.jzzply;
-        this.lwlb = builder.lwlb;
+        this.ywlb = builder.ywlb;
         this.pdh = builder.pdh;
         this.qhrxm = builder.qhrxm;
         this.qhsj = builder.qhsj;
@@ -105,12 +105,12 @@ public class Queue {
         this.pdh = pdh;
     }
 
-    public String getLwlb() {
-        return lwlb;
+    public String getYwlb() {
+        return ywlb;
     }
 
-    public void setLwlb(String lwlb) {
-        this.lwlb = lwlb;
+    public void setYwlb(String ywlb) {
+        this.ywlb = ywlb;
     }
 
     public String getSfzmhm() {
@@ -209,7 +209,7 @@ public class Queue {
         /*
          * 业务类别
          */
-        private String lwlb;
+        private String ywlb;
         /*
          * 身份证名号码
          */
@@ -267,8 +267,8 @@ public class Queue {
 
         }
 
-        public Builder setLwlb(String lwlb) {
-            this.lwlb = lwlb;
+        public Builder setYwlb(String ywlb) {
+            this.ywlb = ywlb;
             return this;
         }
 
@@ -334,7 +334,7 @@ public class Queue {
                 "sbkzjsjip='" + sbkzjsjip + '\'' +
                 ", qhxxxlh='" + qhxxxlh + '\'' +
                 ", pdh='" + pdh + '\'' +
-                ", lwlb='" + lwlb + '\'' +
+                ", ywlb='" + ywlb + '\'' +
                 ", sfzmhm='" + sfzmhm + '\'' +
                 ", dlrsfzmhm='" + dlrsfzmhm + '\'' +
                 ", qhrxm='" + qhrxm + '\'' +
