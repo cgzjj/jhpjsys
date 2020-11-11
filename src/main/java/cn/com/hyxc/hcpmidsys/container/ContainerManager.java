@@ -44,7 +44,7 @@ public class ContainerManager extends AbsContainerManager {
     }
 
     public synchronized void putAddOne() {
-        this.queue.add(new Queue.Builder().setPdh("202011100002").setQhrxm("袁月璨").setRylb(1).build());
+        //this.queue.add(new Queue.Builder().setPdh("202011100002").setQhrxm("袁月璨").setRylb(1).build());
         onAddNew(queue);
     }
 
@@ -65,8 +65,8 @@ public class ContainerManager extends AbsContainerManager {
     }
 
     private void putIfAbsent() {
-        queue.add(new Queue.Builder().setPdh("202011100002").setQhrxm("袁月璨").setRylb(1).build());
-        queue.add(new Queue.Builder().setPdh("202011100003").setQhrxm("蒲冰").setRylb(1).build());
+        //queue.add(new Queue.Builder().setPdh("202011100002").setQhrxm("袁月璨").setRylb(1).build());
+        //queue.add(new Queue.Builder().setPdh("202011100003").setQhrxm("蒲冰").setRylb(1).build());
         controlComputers.add(new ControlComputer.Builder().setCkbh("01").setJsjip("192.168.0.1").setJsjlb("1").build());
         controlComputers.add(new ControlComputer.Builder().setCkbh("02").setJsjip("192.168.0.2").setJsjlb("2").build());
     }
