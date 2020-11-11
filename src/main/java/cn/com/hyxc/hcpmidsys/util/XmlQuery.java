@@ -1,7 +1,11 @@
 package cn.com.hyxc.hcpmidsys.util;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.core.io.ClassPathResource;
+import org.xml.sax.XMLReader;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 import java.io.BufferedReader;
@@ -10,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 /**
  * xml文档查询类
@@ -150,6 +155,28 @@ public class XmlQuery {
         sb.append("    </body>");
         sb.append("</business>");
         return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        ClassPathResource fileResource = new ClassPathResource("/xml/25C10.xml");
+        System.out.println(fileResource);
+        try {
+            Document document = new SAXReader().read(fileResource.getFile());
+            Element element = document.getRootElement();
+            List<Element> list  = element.elements("root");
+            for (Element e:
+                 list) {
+                System.out.println("设备控制计算机 : "+ e.elementText("sbkzjsjbh"));
+                System.out.println("计算机类别 : "+ e.elementText("jsjlb"));
+                System.out.println("计算机IP : "+ e.elementText("jsjip"));
+                System.out.println("窗口编号 : "+ e.elementText("ckbh"));
+                System.out.println("可办业务类别 : "+ e.elementText("kbywlb"));
+
+            }
+        }catch (IOException | DocumentException e){
+            e.printStackTrace();
+        }
+
     }
 
    
