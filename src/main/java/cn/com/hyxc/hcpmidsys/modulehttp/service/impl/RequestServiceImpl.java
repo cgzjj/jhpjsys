@@ -136,7 +136,6 @@ public class RequestServiceImpl implements RequestService {
         if (selectQueue== null){
             //记录该计算机暂时没有可办理业务
             containerManager.updateComputerStatus(selectControlComputer.getUuid(),"3");
-
             return result;
         }
         //通过喇叭喊话和LED显示屏上显示申请人到相应窗口办理业务
