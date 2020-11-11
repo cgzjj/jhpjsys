@@ -122,6 +122,9 @@ public class ContainerManager extends AbsContainerManager {
      * @return
      */
     public synchronized Queue pullQueueing(int index) {
+        if (index == -1) {
+            return null;
+        }
         return queue.remove(index);
     }
 

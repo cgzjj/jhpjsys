@@ -118,6 +118,9 @@ public class ControlComputer {
                 ", jsjip='" + jsjip + '\'' +
                 ", jsjlb='" + jsjlb + '\'' +
                 ", kbywlb='" + kbywlb + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", qhxxxlh='" + qhxxxlh + '\'' +
+                ", status='" + status + '\'' +
                 '}';
     }
 

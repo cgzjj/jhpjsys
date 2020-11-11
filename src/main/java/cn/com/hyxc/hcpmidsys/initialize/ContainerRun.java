@@ -22,7 +22,6 @@ import java.util.Vector;
  *
  * @author yuanyc
  */
-
 @Component//被spring容器管理
 @Order(1) //表示执行顺序
 public class ContainerRun implements ApplicationRunner {
@@ -34,24 +33,6 @@ public class ContainerRun implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        List<ControlComputer> controlComputers = new Vector<ControlComputer>();
-        try {
-            Document document = new SAXReader().read("src/main/resources/templates/xml/25C10.xml");
-            Element element = document.getRootElement();
-            List<Element> list  = element.elements();
-            for (Element e:
-                    list) {
-                controlComputers.add(new ControlComputer.Builder()
-                        .setCkbh(e.elementText("ckbh"))
-                        .setJsjip(e.elementText("jsjip"))
-                        .setJsjlb(e.elementText("jsjlb"))
-                        .setKbywlb(e.elementText("kbywlb"))
-                        .setSbkzjsjbh(e.elementText("sbkzjsjbh"))
-                .build());
-            }
-        }catch ( DocumentException e){
-            e.printStackTrace();
-        }
-        ContainerManager.getContainerManager().putControlComputerList(controlComputers);
+        ContainerManager.getContainerManager().putControlComputerList(XmlQuery.getControlComputerConfig());
     }
 }

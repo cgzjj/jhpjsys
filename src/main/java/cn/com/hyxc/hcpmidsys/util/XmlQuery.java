@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * xml文档查询类
@@ -156,22 +157,26 @@ public class XmlQuery {
         return sb.toString();
     }
 
-    public static void getControlComputerConfig(){
+    public static List<ControlComputer> getControlComputerConfig(){
+        List<ControlComputer> controlComputers = new Vector<ControlComputer>();
         try {
             Document document = new SAXReader().read("src/main/resources/templates/xml/25C10.xml");
             Element element = document.getRootElement();
             List<Element> list  = element.elements();
             for (Element e:
                     list) {
-                System.out.println("设备控制计算机 : "+ e.elementText("sbkzjsjbh"));
-                System.out.println("计算机类别 : "+ e.elementText("jsjlb"));
-                System.out.println("计算机IP : "+ e.elementText("jsjip"));
-                System.out.println("窗口编号 : "+ e.elementText("ckbh"));
-                System.out.println("可办业务类别 : "+ e.elementText("kbywlb"));
+                controlComputers.add(new ControlComputer.Builder()
+                        .setCkbh(e.elementText("ckbh"))
+                        .setJsjip(e.elementText("jsjip"))
+                        .setJsjlb(e.elementText("jsjlb"))
+                        .setKbywlb(e.elementText("kbywlb"))
+                        .setSbkzjsjbh(e.elementText("sbkzjsjbh"))
+                        .build());
             }
         }catch ( DocumentException e){
             e.printStackTrace();
         }
+        return controlComputers;
     }
 
     public static void main(String[] args) {

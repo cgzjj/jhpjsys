@@ -71,6 +71,10 @@ public class HelloController {
         ContainerManager containerManager = ContainerManager.getContainerManager();
         List<ControlComputer> controlComputers = containerManager.getControlComputers();
         System.out.println(controlComputers);
+
+        ControlComputer computer = controlComputers.get(0);
+        containerManager.updateComputerStatus(computer.getUuid(),"1");
+        System.out.println(containerManager.getControlComputers());
         return "admin";
     }
 
