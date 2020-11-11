@@ -1,17 +1,16 @@
 package cn.com.hyxc.hcpmidsys.util;
 
+import cn.com.hyxc.hcpmidsys.container.ContainerManager;
+import cn.com.hyxc.hcpmidsys.container.ControlComputer;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.core.io.ClassPathResource;
-import org.xml.sax.XMLReader;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -157,26 +156,28 @@ public class XmlQuery {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        ClassPathResource fileResource = new ClassPathResource("/xml/25C10.xml");
-        System.out.println(fileResource);
+    public static void getControlComputerConfig(){
         try {
-            Document document = new SAXReader().read(fileResource.getFile());
+            Document document = new SAXReader().read("src/main/resources/templates/xml/25C10.xml");
             Element element = document.getRootElement();
-            List<Element> list  = element.elements("root");
+            List<Element> list  = element.elements();
             for (Element e:
-                 list) {
+                    list) {
                 System.out.println("设备控制计算机 : "+ e.elementText("sbkzjsjbh"));
                 System.out.println("计算机类别 : "+ e.elementText("jsjlb"));
                 System.out.println("计算机IP : "+ e.elementText("jsjip"));
                 System.out.println("窗口编号 : "+ e.elementText("ckbh"));
                 System.out.println("可办业务类别 : "+ e.elementText("kbywlb"));
-
             }
-        }catch (IOException | DocumentException e){
+        }catch ( DocumentException e){
             e.printStackTrace();
         }
+    }
 
+    public static void main(String[] args) {
+        ContainerManager containerManager = ContainerManager.getContainerManager();
+        List<ControlComputer> controlComputers = containerManager.getControlComputers();
+        System.out.println(controlComputers);
     }
 
    

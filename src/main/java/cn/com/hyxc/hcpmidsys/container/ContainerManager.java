@@ -20,7 +20,6 @@ public class ContainerManager extends AbsContainerManager {
         onQueueCreate(queue);
         controlComputers = new Vector<>();
         onComputerCreate(controlComputers);
-        putIfAbsent();
     }
 
     public static ContainerManager getContainerManager() {
@@ -35,23 +34,41 @@ public class ContainerManager extends AbsContainerManager {
         return manager;
     }
 
-    public List<Queue> getQueue() {
+    @Override
+    void destroy() {
+        super.destroy();
+        queue = null;
+        controlComputers = null;
+        manager = null;
+    }
+
+    /**
+     * 获取排队队列
+     *
+     * @return
+     * @author yuanyc
+     */
+    public synchronized List<Queue> getQueue() {
         return queue;
     }
 
-    public List<ControlComputer> getControlComputers() {
+    /**
+     * 获取控制计算机配置信息
+     *
+     * @return
+     * @author yuanyc
+     */
+    public synchronized List<ControlComputer> getControlComputers() {
         return controlComputers;
     }
 
     public synchronized void putAddOne() {
-        //this.queue.add(new Queue.Builder().setPdh("202011100002").setQhrxm("袁月璨").setRylb(1).build());
-        onAddNew(queue);
+        onAddNewQueue(queue);
     }
 
     @Override
-    public synchronized void onAddNew(List<Queue> queue) {
-        super.onAddNew(queue);
-        System.out.println(queue.size() + "gg");
+    public synchronized void onAddNewQueue(List<Queue> queue) {
+        super.onAddNewQueue(queue);
     }
 
     @Override
@@ -64,19 +81,134 @@ public class ContainerManager extends AbsContainerManager {
         super.onComputerCreate(controlComputers);
     }
 
-    private void putIfAbsent() {
-        //queue.add(new Queue.Builder().setPdh("202011100002").setQhrxm("袁月璨").setRylb(1).build());
-        //queue.add(new Queue.Builder().setPdh("202011100003").setQhrxm("蒲冰").setRylb(1).build());
-        controlComputers.add(new ControlComputer.Builder().setCkbh("01").setJsjip("192.168.0.1").setJsjlb("1").build());
-        controlComputers.add(new ControlComputer.Builder().setCkbh("02").setJsjip("192.168.0.2").setJsjlb("2").build());
+    /**
+     * 添加 业务/制证窗口计算机配置信息
+     *
+     * @param computerList
+     * @author yuanyc
+     */
+    public synchronized void putControlComputerList(List<ControlComputer> computerList) {
+        for (ControlComputer computer : computerList
+        ) {
+            controlComputers.add(computer);
+        }
     }
 
-    @Override
-    void destroy() {
-        queue = null;
-        controlComputers = null;
-        manager = null;
-        super.destroy();
+    /**
+     * 添加一条排队信息
+     *
+     * @param queueing 排队信息
+     * @author yuanyc
+     */
+    public synchronized void putNewQueueing(Queue queueing) {
+        queue.add(queueing);
+        onAddNewQueue(queue);
+    }
+
+    /**
+     * 取出一条排队信息
+     * 从队伍首位取出一位排队信息
+     *
+     * @author yuanyc
+     */
+    public synchronized Queue pullQueueing() {
+        return queue.remove(0);
+    }
+
+    /**
+     * 取出中间某位的排队号
+     *
+     * @param index
+     * @return
+     */
+    public synchronized Queue pullQueueing(int index) {
+        return queue.remove(index);
+    }
+
+    /**
+     * 通过业务类别匹配 获取排队信息
+     *
+     * @param kbywlb 可办业务类别
+     * @return queue
+     * 01#02#04
+     * @author yuanyc
+     */
+    public synchronized Queue pullQueuing(String kbywlb) {
+        for (Queue queueing : queue
+        ) {
+            if (kbywlb.startsWith(queueing.getYwlb())) {
+                return pullQueueing(queue.indexOf(queueing));
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 排队置顶
+     * 给特殊的排队号进行置顶操作
+     *
+     * @param queueing 排队信息
+     * @author yuanyc
+     */
+    public synchronized boolean putQueuing2Top(Queue queueing) {
+        int index;
+        if ((index = queue.indexOf(queueing)) == -1) {
+            return false;
+        }
+        queue.add(0, queue.remove(index));
+        return true;
+    }
+
+    /**
+     * 排队置顶
+     * 给特殊的排队号进行置顶操作
+     *
+     * @param pdh 排队号
+     * @author yuanyc
+     */
+    public synchronized boolean putQueuing2Top(String pdh) {
+        for (Queue queueing : queue
+        ) {
+            if (pdh.equals(queueing.getPdh())) {
+                return putQueuing2Top(queueing);
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * 更新计算机状态
+     *
+     * @param status
+     * @author yuanyc
+     */
+    public synchronized boolean updateComputerStatus(String uuid, String status) {
+        for (ControlComputer computer :
+                controlComputers) {
+            if (uuid.equals(computer.getUuid())) {
+                computer.setStatus(status);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 更新取号信息序列号
+     *
+     * @param
+     * @author yuanyc
+     */
+    public synchronized boolean updateQhxxxlhInComputers(String uuid, String qhxxxlh) {
+        for (ControlComputer computer :
+                controlComputers) {
+            if (uuid.equals(computer.getUuid())) {
+                computer.setQhxxxlh(qhxxxlh);
+                return true;
+            }
+        }
+        return false;
     }
 
 }

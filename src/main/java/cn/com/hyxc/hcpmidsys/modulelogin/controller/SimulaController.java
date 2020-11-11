@@ -18,7 +18,7 @@ import java.net.URL;
  */
 @RestController
 public class SimulaController {
-    @RequestMapping(value = "/user/action", method = RequestMethod.POST)
+   /* @RequestMapping(value = "/user/action", method = RequestMethod.POST)*/
     public void action(HttpServletRequest request) {
         System.out.println(" 类型 : " + request.getParameter("onType"));
         System.out.println(" 数据 : " + request.getParameter("reqdata"));

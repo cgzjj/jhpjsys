@@ -49,14 +49,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      /*  BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         auth.inMemoryAuthentication()
                 .passwordEncoder(new BCryptPasswordEncoder())
                 .withUser("admin").password(encoder.encode("123")).roles("ADMIN", "USER")
                 .and()
                 .withUser("ccc").password(encoder.encode("sss")).roles("USER")
                 .and()
-                .withUser("yuanyc").password(encoder.encode("1")).roles("USER");
+                .withUser("yuanyc").password(encoder.encode("1")).roles("USER");*/
     }
 
     /**
@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+       /* http.authorizeRequests()
                 //admin 级别的
                 .antMatchers("/admin/**")
                 .hasRole("ADMIN")
@@ -80,6 +80,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/db/**")
                 .access("hasAnyRole('ADMIN') and hasAnyRole('DBA')")
 
+                //可以打开的
+                .antMatchers("/xml/*")
+                .access("")
                 .anyRequest()
                 .authenticated() //任何请求登录后可以访问
 
@@ -168,6 +171,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         // 异常处理
-        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler);*/
     }
 }

@@ -1,4 +1,6 @@
 package cn.com.hyxc.hcpmidsys.modulelogin.controller;
+import cn.com.hyxc.hcpmidsys.container.ContainerManager;
+import cn.com.hyxc.hcpmidsys.container.ControlComputer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @Description: TODO
@@ -65,7 +68,9 @@ public class HelloController {
 
     @GetMapping("/admin/hello")
     public String hello2(){
-
+        ContainerManager containerManager = ContainerManager.getContainerManager();
+        List<ControlComputer> controlComputers = containerManager.getControlComputers();
+        System.out.println(controlComputers);
         return "admin";
     }
 

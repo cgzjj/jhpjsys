@@ -1,5 +1,7 @@
 package cn.com.hyxc.hcpmidsys.util;
 
+import java.util.UUID;
+
 /**
  * 常用工具类
  *
@@ -25,6 +27,15 @@ public class CommonUtil {
      */
     public static boolean isNotNullString(String str){
         return !isNullString(str);
+    }
+
+    /**
+     * 生成UUID
+     *
+     * @return
+     */
+    public static String getNewUUID(){
+        return UUID.randomUUID().toString().replaceAll("-","");
     }
 
 

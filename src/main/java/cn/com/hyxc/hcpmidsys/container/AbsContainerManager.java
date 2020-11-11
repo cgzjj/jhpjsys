@@ -17,9 +17,10 @@ public abstract class AbsContainerManager {
         System.out.println("容器被创建，初始容量为 : " + controlComputers.size());
     }
 
-    public synchronized void onAddNew(List<Queue> queue) {
+    public synchronized void onAddNewQueue(List<Queue> queue) {
         System.out.println("当前容器的容量 : " + queue.size());
     }
+
 
     void destroy() {
         System.out.println("ContainerManager 被销毁");
