@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan("cn.com.hyxc.hcpmidsys.*")
 
+@ComponentScan("cn.com.hyxc.hcpmidsys.*")
 public class AppdemoApplication {
 
     public static void main(String[] args) {
