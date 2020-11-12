@@ -7,7 +7,9 @@ import cn.com.hyxc.hcpmidsys.modulehttp.entity.LicencePlate;
 import cn.com.hyxc.hcpmidsys.modulehttp.service.Handler;
 import cn.com.hyxc.hcpmidsys.modulehttp.service.RequestService;
 import cn.com.hyxc.hcpmidsys.util.CommonUtil;
+import cn.com.hyxc.hcpmidsys.util.HttpUtil;
 import cn.com.hyxc.hcpmidsys.util.TcpUtil;
+import cn.com.hyxc.hcpmidsys.util.XmlQuery;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -192,8 +194,46 @@ public class RequestServiceImpl implements RequestService {
         writeData.put("message","");
         result = writeMessage(200,"请求成功",writeData);
         TcpUtil.receiverTcp(8080,qhxxxlh);
+        getMessage(qhxxxlh);
         return result;
     }
+
+    /**
+     * 接收评价系统发送来的评价
+     * @param qhxxxlh
+     */
+    private void getMessage(String qhxxxlh){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int msg = TcpUtil.receiverTcp(8080,qhxxxlh);
+                handleGetMessage(msg,qhxxxlh);
+            }
+        }).start();
+    }
+
+    /**
+     * 对发送来的评价进行处理
+     * @param msg
+     * @param qhxxlh
+     */
+    private void handleGetMessage(int msg,String qhxxlh){
+        //处理业务
+        String pjlb = "1";
+        String pjjg = msg+"";
+        if (msg == 5||msg == 0){
+            pjlb = "2";
+            pjjg = "1";
+        }
+        String url = "http://192.168.101.103:8080/queue";
+        Map<String,String> map = new HashMap<>();
+        map.put("qhxxlh",qhxxlh);
+        map.put("pjlb",pjlb);
+        map.put("pjjg",pjjg);
+        String evaluation = XmlQuery.evaluationWriteXml(map);
+        XmlQuery.sendHttps(evaluation,url);
+    }
+
 
     /**
      * 过号请求处理
