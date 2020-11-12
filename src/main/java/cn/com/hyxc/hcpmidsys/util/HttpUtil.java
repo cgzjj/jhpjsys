@@ -36,8 +36,10 @@ public class HttpUtil {
                    con.setDoInput(true);
                    // 不使用缓存
                    con.setUseCaches(false);
+                   con.setConnectTimeout(1500);
                    // 这句是打开链接
                    OutputStream out = con.getOutputStream();
+
                    // 把数据写到报文;
                    out.write((json).getBytes());
                    out.flush();

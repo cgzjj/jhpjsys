@@ -5,6 +5,11 @@ import cn.com.hyxc.hcpmidsys.util.CommonUtil;
 import java.util.UUID;
 
 public class ControlComputer {
+
+    /**
+     * 设备控制计算机ip
+     */
+    private String sbkzjsjip;
     /*
      * 设备控制计算机编号
      */
@@ -69,6 +74,10 @@ public class ControlComputer {
 
     public String getEvaluateIp() {
         return evaluateIp;
+    }
+
+    public String getSbkzjsjip() {
+        return sbkzjsjip;
     }
 
     public void setEvaluateIp(String evaluateIp) {

@@ -36,4 +36,22 @@
         <!-- 可办业务类别 -->
         <kbywlb>01</kbywlb>
     </queue>
+    <queue>
+        <ywckjsjip></ywckjsjip>
+        <sbkzjsjbh></sbkzjsjbh>
+        <qhxxxlh></qhxxxlh>
+        <pdh></pdh>
+        <ywlb></ywlb>
+        <sfzmhm></sfzmhm>
+        <dlrsfzmhm></dlrsfzmhm>
+        <qhrxm></qhrxm>
+        <rylvb></rylvb>
+        <rxbdjg></rxbdjg>
+        <rxbdxsd></rxbdxsd>
+        <jzzply></jzzply>
+        <jzbdzp></jzbdzp>
+        <xczp></xczp>
+    </queue>
 </root>
+
+
