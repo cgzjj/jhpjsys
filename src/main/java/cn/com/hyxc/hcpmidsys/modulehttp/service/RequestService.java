@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-
 public interface RequestService {
 
     public JSONObject ProcessingRequests(HttpServletRequest request, String json);
