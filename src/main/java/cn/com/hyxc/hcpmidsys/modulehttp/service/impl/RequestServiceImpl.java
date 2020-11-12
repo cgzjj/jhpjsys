@@ -6,11 +6,14 @@ import cn.com.hyxc.hcpmidsys.container.Queue;
 import cn.com.hyxc.hcpmidsys.modulehttp.service.RequestService;
 import cn.com.hyxc.hcpmidsys.util.CommonUtil;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *处理所有的请求

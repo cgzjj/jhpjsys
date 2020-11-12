@@ -37,6 +37,10 @@ public class ControlComputer {
      * 窗口状态
      */
     private String status;
+    /**
+     * 排队信息
+     */
+    private Queue queuing;
 
 
     private ControlComputer(Builder builder) {
@@ -48,6 +52,14 @@ public class ControlComputer {
 
         this.uuid = CommonUtil.getNewUUID();
         this.status = "0";
+    }
+
+    public Queue getQueuing() {
+        return queuing;
+    }
+
+    public void setQueuing(Queue queuing) {
+        this.queuing = queuing;
     }
 
     public String getCkbh() {
@@ -121,6 +133,7 @@ public class ControlComputer {
                 ", uuid='" + uuid + '\'' +
                 ", qhxxxlh='" + qhxxxlh + '\'' +
                 ", status='" + status + '\'' +
+                ", queuing=" + queuing +
                 '}';
     }
 
