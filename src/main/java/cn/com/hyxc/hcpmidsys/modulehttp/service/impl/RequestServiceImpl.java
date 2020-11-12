@@ -7,6 +7,7 @@ import cn.com.hyxc.hcpmidsys.modulehttp.service.RequestService;
 import cn.com.hyxc.hcpmidsys.util.CommonUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,11 @@ import java.util.Map;
  *
  * @author jiangt
  */
+@Service
 public class RequestServiceImpl implements RequestService {
+
+    @Autowired
+    private ContainerManager containerManager;
 
     /**
      * 处理请求
@@ -106,7 +111,6 @@ public class RequestServiceImpl implements RequestService {
         writeData.put("message","");
         result = writeMessage(200,"再次叫号请求成功",writeData);
         //修改电脑备案信息数组内的qhxxxlh为空
-        ContainerManager containerManager = ContainerManager.getContainerManager();
         containerManager.updateQhxxxlhInComputers(selectComputer.getUuid(),null);
         return result;
     }
@@ -134,7 +138,6 @@ public class RequestServiceImpl implements RequestService {
             return result;
         }
         //通过可办理业务类型找到排队人员
-        ContainerManager containerManager = ContainerManager.getContainerManager();
         selectQueue = containerManager.pullQueuing(kbywlb);
         if (selectQueue== null){
             //记录该计算机暂时没有可办理业务
@@ -189,7 +192,6 @@ public class RequestServiceImpl implements RequestService {
      */
     public ControlComputer getComputerByIp(String ywckjsjip){
         ControlComputer selectControlComputer = null;
-        ContainerManager containerManager = ContainerManager.getContainerManager();
         List<ControlComputer>computerList = containerManager.getControlComputers();
         for (ControlComputer controlComputer:computerList) {
             if (controlComputer.getJsjip().equals(ywckjsjip)){
@@ -206,7 +208,6 @@ public class RequestServiceImpl implements RequestService {
      */
     public Queue getQueueByKbywlb(String kbywlb){
         String [] strs = kbywlb.split("#");
-        ContainerManager containerManager = ContainerManager.getContainerManager();
         List<Queue>queueList = containerManager.getQueue();
         for (Queue queue:queueList) {
             for (String str: strs) {
@@ -240,7 +241,6 @@ public class RequestServiceImpl implements RequestService {
      */
     public ControlComputer getComputerByQhxxxlh(String qhxxxlh){
         ControlComputer selectControlComputer = null;
-        ContainerManager containerManager = ContainerManager.getContainerManager();
         List<ControlComputer>computerList = containerManager.getControlComputers();
         for (ControlComputer controlComputer:computerList) {
             if (controlComputer.getQhxxxlh().equals(qhxxxlh)){
