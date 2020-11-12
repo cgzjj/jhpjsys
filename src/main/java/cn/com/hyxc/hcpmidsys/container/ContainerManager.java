@@ -1,5 +1,9 @@
 package cn.com.hyxc.hcpmidsys.container;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 /**
@@ -7,25 +11,28 @@ import java.util.*;
  *
  * @author yuanyc
  */
-public class ContainerManager extends AbsContainerManager implements AbsContainerManager.QueueListener{
+@Component
+@Scope("singleton")
+public class ContainerManager extends AbsContainerManager {
+
+    @Autowired
+    private QueueListener queueListener;
+
+    @Autowired
+    private static volatile ContainerManager manager;
 
     private Vector<Queue> queue;
 
     private Vector<ControlComputer> controlComputers;
 
-    private static volatile ContainerManager manager = null;
-
-    private QueueListener queueListener;
-
     private ContainerManager() {
         queue = new Vector<>();
         onQueueCreate(queue);
-        queueListener = this;
         controlComputers = new Vector<>();
         onComputerCreate(controlComputers);
     }
 
-    public static ContainerManager getContainerManager() {
+    /*public static ContainerManager getContainerManager() {
         if (manager == null) {
             synchronized (ContainerManager.class) {
                 if (manager == null) {
@@ -35,7 +42,7 @@ public class ContainerManager extends AbsContainerManager implements AbsContaine
             }
         }
         return manager;
-    }
+    }*/
 
     @Override
     void destroy() {
@@ -107,6 +114,7 @@ public class ContainerManager extends AbsContainerManager implements AbsContaine
     public synchronized void putNewQueueing(Queue queueing) {
         queue.add(queueing);
         onAddNewQueue(queue);
+        queueListener.onUpdate(queue);
     }
 
     /**
@@ -116,6 +124,7 @@ public class ContainerManager extends AbsContainerManager implements AbsContaine
      * @author yuanyc
      */
     public synchronized Queue pullQueueing() {
+        queueListener.onUpdate(queue);
         return queue.remove(0);
     }
 
@@ -129,6 +138,7 @@ public class ContainerManager extends AbsContainerManager implements AbsContaine
         if (index == -1) {
             return null;
         }
+        queueListener.onUpdate(queue);
         return queue.remove(index);
     }
 
@@ -235,11 +245,4 @@ public class ContainerManager extends AbsContainerManager implements AbsContaine
          return false;
      }
 
-    /**
-     * 监听到
-     */
-    @Override
-    public void onUpdate() {
-
-    }
 }

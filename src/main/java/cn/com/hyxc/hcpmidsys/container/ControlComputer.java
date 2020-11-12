@@ -41,6 +41,14 @@ public class ControlComputer {
      * 排队信息
      */
     private Queue queuing;
+    /*
+     * 对应评价器ip
+     */
+    private String evaluateIp;
+    /*
+     * 对应评价器端口
+     */
+    private int evaluatePort;
 
 
     private ControlComputer(Builder builder) {
@@ -56,6 +64,23 @@ public class ControlComputer {
 
     public Queue getQueuing() {
         return queuing;
+    }
+
+
+    public String getEvaluateIp() {
+        return evaluateIp;
+    }
+
+    public void setEvaluateIp(String evaluateIp) {
+        this.evaluateIp = evaluateIp;
+    }
+
+    public int getEvaluatePort() {
+        return evaluatePort;
+    }
+
+    public void setEvaluatePort(int evaluatePort) {
+        this.evaluatePort = evaluatePort;
     }
 
     public void setQueuing(Queue queuing) {
@@ -134,6 +159,8 @@ public class ControlComputer {
                 ", qhxxxlh='" + qhxxxlh + '\'' +
                 ", status='" + status + '\'' +
                 ", queuing=" + queuing +
+                ", evaluateIp='" + evaluateIp + '\'' +
+                ", evaluatePort=" + evaluatePort +
                 '}';
     }
 

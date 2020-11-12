@@ -26,7 +26,4 @@ public abstract class AbsContainerManager {
     }
 
 
-    interface QueueListener {
-         void onUpdate();
-    }
 }

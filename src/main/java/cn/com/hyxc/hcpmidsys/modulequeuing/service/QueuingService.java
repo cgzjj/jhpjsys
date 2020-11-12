@@ -1,12 +1,19 @@
 package cn.com.hyxc.hcpmidsys.modulequeuing.service;
 
+import cn.com.hyxc.hcpmidsys.container.Queue;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.stereotype.Service;
 
-import java.util.Vector;
-
-@Service
 public interface QueuingService {
 
+    /**
+     * 取号机启动
+     * @return
+     */
     JSONObject queuingInit();
+
+    /**
+     * 取号人取号
+     * @return
+     */
+    JSONObject queuingTakeno(Queue queue);
 }

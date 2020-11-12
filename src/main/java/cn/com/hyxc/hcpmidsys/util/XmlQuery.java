@@ -180,9 +180,8 @@ public class XmlQuery {
     }
 
     public static void main(String[] args) {
-        ContainerManager containerManager = ContainerManager.getContainerManager();
-        List<ControlComputer> controlComputers = containerManager.getControlComputers();
-        System.out.println(controlComputers);
+        //List<ControlComputer> controlComputers = containerManager.getControlComputers();
+        //System.out.println(controlComputers);
     }
 
    

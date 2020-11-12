@@ -8,6 +8,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -26,6 +27,8 @@ import java.util.Vector;
 @Order(1) //表示执行顺序
 public class ContainerRun implements ApplicationRunner {
 
+    @Autowired
+    private ContainerManager containerManager;
     /**
      * 读取 业务/制证计算机的配置xml启动
      * @param args
@@ -33,6 +36,6 @@ public class ContainerRun implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        ContainerManager.getContainerManager().putControlComputerList(XmlQuery.getControlComputerConfig());
+        containerManager.putControlComputerList(XmlQuery.getControlComputerConfig());
     }
 }
