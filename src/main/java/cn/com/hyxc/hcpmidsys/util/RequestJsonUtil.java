@@ -16,6 +16,7 @@ public class RequestJsonUtil {
         // GET
         try {
             if (submitMehtod.equals("GET")) {
+
                 return new String(request.getQueryString().getBytes("iso-8859-1"), "utf-8").replaceAll("%22", "\"");
                 // POST
             } else {

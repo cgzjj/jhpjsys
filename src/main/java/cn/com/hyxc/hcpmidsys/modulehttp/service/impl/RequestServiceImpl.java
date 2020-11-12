@@ -3,9 +3,11 @@ package cn.com.hyxc.hcpmidsys.modulehttp.service.impl;
 import cn.com.hyxc.hcpmidsys.container.ContainerManager;
 import cn.com.hyxc.hcpmidsys.container.ControlComputer;
 import cn.com.hyxc.hcpmidsys.container.Queue;
+import cn.com.hyxc.hcpmidsys.modulehttp.entity.LicencePlate;
 import cn.com.hyxc.hcpmidsys.modulehttp.service.Handler;
 import cn.com.hyxc.hcpmidsys.modulehttp.service.RequestService;
 import cn.com.hyxc.hcpmidsys.util.CommonUtil;
+import cn.com.hyxc.hcpmidsys.util.TcpUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -93,31 +95,70 @@ public class RequestServiceImpl implements RequestService {
      */
     private JSONObject receiveRequest(JSONObject data) {
         JSONObject result = null;
+        String lsh = data.getString("lsh");
+        String xm = data.getString("xm");
+        String pzlx = data.getString("pzlx");
+        String zzjsjip = data.getString("zzjsjip");
+        String lzckbh = data.getString("lzckbh");
+        if (CommonUtil.isNullString(lsh)||CommonUtil.isNullString(xm)||
+                CommonUtil.isNullString(pzlx)||CommonUtil.isNullString(zzjsjip)||
+                CommonUtil.isNullString(lzckbh)){
+            JSONObject writeData = new JSONObject();
+            writeData.put("code",2);
+            writeData.put("message","没有获取到全部数据");
+            result = writeMessage(100,"没有获取到全部数据",writeData);
+            return result;
+        }
+        //将这些数据发送到后台存入数据库
+        /*LicencePlate licencePlate = new LicencePlate.Builder().setLsh(lsh)
+               .setLzckbh(xm).setPzlx(pzlx).setZzjsjip(zzjsjip).setLzckbh(lzckbh).bulid();
+        licencePlateInformationDao.saveLicencePlateInformation(licencePlate);*/
 
+
+        JSONObject writeData = new JSONObject();
+        writeData.put("code",1);
+        writeData.put("message","");
+        result = writeMessage(200,"调用成功",writeData);
         return result;
     }
 
     /**
-     * 恢复叫号请求处理
+     * 恢复/暂停叫号请求处理
      * @param data
      * @return
      */
-    private JSONObject recoverRequest(JSONObject data) {
+    private JSONObject sureRequest(JSONObject data,String chose) {
         JSONObject result = null;
-
+        String ywckjsjip = data.getString("ywckjsjip");
+        if (CommonUtil.isNullString(ywckjsjip)){
+            JSONObject writeData = new JSONObject();
+            writeData.put("code",2);
+            writeData.put("message","业务窗口ip为空");
+            result = writeMessage(100,"业务窗口ip未上传成功",writeData);
+            return result;
+        }
+        String msg = "S04";
+        if (("TMRI_SUSPEND").equals(chose)){
+            //业务窗口上方显示屏中显示“暂停受理”
+            msg = "S03";
+        } else {
+            //业务窗口上方显示屏中显示“恢复受理”
+        }
+        int s = TcpUtil.senderTcp("172.0.0.1",5000,msg);
+        if (s == 2){
+            JSONObject writeData = new JSONObject();
+            writeData.put("code",s);
+            writeData.put("message","请检查评价器是否启动完成");
+            result = writeMessage(200,"程序出现异常",writeData);
+            return result;
+        }
+        JSONObject writeData = new JSONObject();
+        writeData.put("code",s);
+        writeData.put("message","");
+        result = writeMessage(200,"请求成功",writeData);
         return result;
     }
 
-    /**
-     * 暂停叫号请求处理
-     * @param data
-     * @return
-     */
-    private JSONObject suspendRequest(JSONObject data) {
-        JSONObject result = null;
-
-        return result;
-    }
     /**
      * 提请评价请求处理
      * @param data
@@ -130,15 +171,27 @@ public class RequestServiceImpl implements RequestService {
             JSONObject writeData = new JSONObject();
             writeData.put("code",2);
             writeData.put("message","取号信息序列号为空");
-            writeMessage(100,"取号信息序列号为空",writeData);
+            result = writeMessage(100,"取号信息序列号未上传成功",writeData);
             return result;
         }
         //通过qhxxxlh去找到电脑的备案信息
         ControlComputer selectControlComputer = getComputerByQhxxxlh(qhxxxlh);
         //提请评价
         String msg = "S02";
-       //TcpUtil.senderTcp(selectControlComputer.getUrl(),selectControlComputer.getPort(),msg);
+        int s = TcpUtil.senderTcp("172.0.0.1",5000,msg);
 
+        if (s == 2){
+            JSONObject writeData = new JSONObject();
+            writeData.put("code",s);
+            writeData.put("message","请检查评价器是否启动完成");
+            result = writeMessage(200,"程序出现异常",writeData);
+            return result;
+        }
+        JSONObject writeData = new JSONObject();
+        writeData.put("code",s);
+        writeData.put("message","");
+        result = writeMessage(200,"请求成功",writeData);
+        TcpUtil.receiverTcp(8080,qhxxxlh);
         return result;
     }
 
@@ -186,7 +239,7 @@ public class RequestServiceImpl implements RequestService {
         writeData.put("ywckjsjip",selectControlComputer.getJsjip());
         result = writeData(selectQueue,writeData);
         //将处理的队列信息写入电脑的备案信息中
-        containerManager.uodateQueuingInComputers(selectControlComputer.getUuid(),selectQueue);
+        containerManager.updateQueuingInComputers(selectControlComputer.getUuid(),selectQueue);
         return result;
     }
 
@@ -268,7 +321,7 @@ public class RequestServiceImpl implements RequestService {
         JSONObject writeData = new JSONObject();
         result = writeData(selectQueue,writeData);
         //将处理的队列信息写入电脑的备案信息中
-        containerManager.uodateQueuingInComputers(selectControlComputer.getUuid(),selectQueue);
+        containerManager.updateQueuingInComputers(selectControlComputer.getUuid(),selectQueue);
 
 
         return result;
@@ -395,14 +448,14 @@ public class RequestServiceImpl implements RequestService {
     static class SuspendHandler implements Handler {
         @Override
         public JSONObject execute(JSONObject data) {
-            return new RequestServiceImpl().suspendRequest(data);
+            return new RequestServiceImpl().sureRequest(data,"TMRI_SUSPEND");
         }
     }
 
     static class RecoverHandler implements Handler {
         @Override
         public JSONObject execute(JSONObject data) {
-            return new RequestServiceImpl().recoverRequest(data);
+            return new RequestServiceImpl().sureRequest(data,"TMRI_RECOVER");
         }
     }
 
