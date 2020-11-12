@@ -21,8 +21,12 @@ public abstract class AbsContainerManager {
         System.out.println("当前容器的容量 : " + queue.size());
     }
 
-
     void destroy() {
         System.out.println("ContainerManager 被销毁");
+    }
+
+
+    interface QueueListener {
+         void onUpdate();
     }
 }

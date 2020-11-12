@@ -7,7 +7,7 @@ import java.util.*;
  *
  * @author yuanyc
  */
-public class ContainerManager extends AbsContainerManager {
+public class ContainerManager extends AbsContainerManager implements AbsContainerManager.QueueListener{
 
     private Vector<Queue> queue;
 
@@ -15,9 +15,12 @@ public class ContainerManager extends AbsContainerManager {
 
     private static volatile ContainerManager manager = null;
 
+    private QueueListener queueListener;
+
     private ContainerManager() {
         queue = new Vector<>();
         onQueueCreate(queue);
+        queueListener = this;
         controlComputers = new Vector<>();
         onComputerCreate(controlComputers);
     }
@@ -216,4 +219,27 @@ public class ContainerManager extends AbsContainerManager {
         return false;
     }
 
+    /**
+     * 更新计算机配置中的队列
+     *
+     * @author yuanyc
+     */
+     public synchronized boolean uodateQueuingInComputers(String uuid,Queue queuing){
+         for (ControlComputer computer :
+                 controlComputers) {
+             if (uuid.equals(computer.getUuid())) {
+                 computer.setQueuing(queuing);
+                 return true;
+             }
+         }
+         return false;
+     }
+
+    /**
+     * 监听到
+     */
+    @Override
+    public void onUpdate() {
+
+    }
 }
