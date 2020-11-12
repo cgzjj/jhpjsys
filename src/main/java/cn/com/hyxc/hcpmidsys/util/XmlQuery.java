@@ -2,6 +2,7 @@ package cn.com.hyxc.hcpmidsys.util;
 
 import cn.com.hyxc.hcpmidsys.container.ContainerManager;
 import cn.com.hyxc.hcpmidsys.container.ControlComputer;
+import cn.com.hyxc.hcpmidsys.container.Queue;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -14,29 +15,32 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
  * xml文档查询类
+ *
+ * @author yuanyc
  */
 public class XmlQuery {
 
 
     /**
-     * 查询 报文
+     * 发送XML报文
      *
+     * @author yuanyc 2020-11-12
      * @param xmlInfo xml报文
      * @return
      */
-    public static String sendHttps(String xmlInfo) {
+    public static String sendHttps(String xmlInfo,String url) {
         //String a="";//请求参数
         String result = "";
         PrintWriter out = null;
         BufferedReader in = null;
         try {
             //trustAllHosts();
-            URL realUrl = new URL("https://apitest.bwjf.cn/openNozzle");
-
+            URL realUrl = new URL(url);
             //如果是https就是下面两行代码
             /*HttpsURLConnection conn = (HttpsURLConnection) realUrl.openConnection();
             conn.setHostnameVerifier(DO_NOT_VERIFY);*/
@@ -51,10 +55,11 @@ public class XmlQuery {
             // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
             conn.setDoInput(true);
-
+            conn.setConnectTimeout(1500);
+            conn.setReadTimeout(5000);
             // 获取URLConnection对象对应的输出流
             out = new PrintWriter(conn.getOutputStream());
-            //加密
+            // 加密
             String base64keyString = encoder(xmlInfo);
             // 发送请求参数
             out.print(base64keyString);
@@ -177,6 +182,49 @@ public class XmlQuery {
             e.printStackTrace();
         }
         return controlComputers;
+    }
+
+    /**
+     * 补充取号信息写入 xml封装
+     *
+     * @author yuanyc
+     */
+    public static String replenishWriteXml(Queue queuing,ControlComputer computer){
+        StringBuilder sb = new StringBuilder();
+        sb.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        sb.append("	   <queue>");
+        sb.append("       <ywckjsjip>"+computer.getJsjip()+"</ywckjsjip>");
+        sb.append("       <sbkzjsjip>"+computer.getSbkzjsjip()+"</sbkzjsjip>");
+        sb.append("       <qhxxxlh>"+queuing.getQhxxxlh()+"</qhxxxlh>");
+        sb.append("       <pdh>"+queuing.getPdh()+"</pdh>");
+        sb.append("       <ywlb>"+queuing.getYwlb()+"</ywlb>");
+        sb.append("       <sfzmhm>"+queuing.getSfzmhm()+"</sfzmhm>");
+        sb.append("       <dlrsfzmhm>"+queuing.getDlrsfzmhm()+"</dlrsfzmhm>");
+        sb.append("       <qhrxm>"+queuing.getQhrxm()+"</qhrxm>");
+        sb.append("       <rylb>"+queuing.getRylb()+"</rylb>");
+        sb.append("       <rxbdjg>"+queuing.getRxbdjg()+"</rxbdjg>");
+        sb.append("       <jzzply>"+queuing.getJzzply()+"</jzzply>");
+        sb.append("       <jzbdzp>"+queuing.getJzbdzp()+"</jzbdzp>");
+        sb.append("       <xczp>"+queuing.getXczp()+"</xczp>");
+        sb.append("    </queue>");
+        return sb.toString();
+    }
+
+    /**
+     * 评价结果 xml封装
+     *
+     * @author yuanyc
+     * @return
+     */
+    public static String evaluationWriteXml(Map<String,String> evaluationMap){
+        StringBuilder sb = new StringBuilder();
+        sb.append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+        sb.append("	   <queue>");
+        sb.append("       <qhxxxlh>"+evaluationMap.get("qhxxxlh")+"</qhxxxlh>");
+        sb.append("       <pjlb>"+evaluationMap.get("pjlb")+"</pjlb>");
+        sb.append("       <pjjg>"+evaluationMap.get("pjjg")+"</pjjg>");
+        sb.append("    </queue>");
+        return sb.toString();
     }
 
     public static void main(String[] args) {

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -31,18 +33,6 @@ public class ContainerManager extends AbsContainerManager {
         controlComputers = new Vector<>();
         onComputerCreate(controlComputers);
     }
-
-    /*public static ContainerManager getContainerManager() {
-        if (manager == null) {
-            synchronized (ContainerManager.class) {
-                if (manager == null) {
-                    manager = new ContainerManager();
-                    return manager;
-                }
-            }
-        }
-        return manager;
-    }*/
 
     @Override
     void destroy() {
@@ -72,13 +62,21 @@ public class ContainerManager extends AbsContainerManager {
         return controlComputers;
     }
 
-    public synchronized void putAddOne() {
-        onAddNewQueue(queue);
-    }
 
+    /**
+     * 当队列中添加新的排队信息时
+     * 为其生成排队号
+     *
+     * @param queue
+     * @param queuinng
+     */
     @Override
-    public synchronized void onAddNewQueue(List<Queue> queue) {
-        super.onAddNewQueue(queue);
+    public synchronized Queue onAddNewQueue(List<Queue> queue,Queue queuinng) {
+        super.onAddNewQueue(queue, queuinng);
+        Queue newQueuing = queue.get(queue.indexOf(queuinng));
+        String pdh = newQueuing.setPdh("xxxxxx");
+        newQueuing.setQhxxxlh(new SimpleDateFormat("yyMMdd").format(System.currentTimeMillis())+"8888888888"+pdh);
+        return newQueuing;
     }
 
     @Override
@@ -111,10 +109,11 @@ public class ContainerManager extends AbsContainerManager {
      * @param queueing 排队信息
      * @author yuanyc
      */
-    public synchronized void putNewQueueing(Queue queueing) {
+    public synchronized Queue putNewQueueing(Queue queueing) {
         queue.add(queueing);
-        onAddNewQueue(queue);
+        Queue newQueuing = onAddNewQueue(this.queue, queueing);
         queueListener.onUpdate(queue);
+        return newQueuing;
     }
 
     /**
@@ -154,6 +153,16 @@ public class ContainerManager extends AbsContainerManager {
         for (Queue queueing : queue
         ) {
             if (kbywlb.startsWith(queueing.getYwlb())) {
+                return pullQueueing(queue.indexOf(queueing));
+            }
+        }
+        return null;
+    }
+
+    public synchronized Queue pullQueuingByQhxxxlh(String qhxxxlh){
+        for (Queue queueing : queue
+        ) {
+            if (qhxxxlh.equals(queueing.getQhxxxlh())) {
                 return pullQueueing(queue.indexOf(queueing));
             }
         }
@@ -234,7 +243,7 @@ public class ContainerManager extends AbsContainerManager {
      *
      * @author yuanyc
      */
-     public synchronized boolean uodateQueuingInComputers(String uuid,Queue queuing){
+     public synchronized boolean updateQueuingInComputers(String uuid,Queue queuing){
          for (ControlComputer computer :
                  controlComputers) {
              if (uuid.equals(computer.getUuid())) {

@@ -101,8 +101,9 @@ public class Queue {
         return pdh;
     }
 
-    public void setPdh(String pdh) {
+    public String setPdh(String pdh) {
         this.pdh = pdh;
+        return pdh;
     }
 
     public String getYwlb() {
@@ -192,6 +193,7 @@ public class Queue {
     public void setXczp(String xczp) {
         this.xczp = xczp;
     }
+
 
     public static class Builder {
         /*
