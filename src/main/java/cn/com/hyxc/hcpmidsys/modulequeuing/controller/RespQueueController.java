@@ -28,6 +28,6 @@ public class RespQueueController implements QueueListener {
         jsonObject.put("size",queue.size());
         String url = "http://192.168.0.1:8080/ss";
         System.out.println("返回给取号机,当前等待人数 : "+queue.size());
-        sendHttp(url,jsonObject.toJSONString());
+        //sendHttp(url,jsonObject.toJSONString());
     }
 }
