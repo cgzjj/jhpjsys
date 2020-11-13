@@ -67,7 +67,7 @@ public class QueuingServiceImpl implements QueuingService {
      */
     public JSONObject replenishWriteQueuing(Queue queuing, ControlComputer computer) {
         String url = "http://192.168.0.1/xxxxx";
-        XmlQuery.sendHttps(XmlQuery.replenishWriteXml(queuing, computer), url)
+        XmlQuery.sendHttps(XmlQuery.replenishWriteXml(queuing, computer), url);
         return null;
     }
 

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface RequestService {
 
-    public JSONObject ProcessingRequests(HttpServletRequest request, String json);
+    public JSONObject ProcessingRequests(HttpServletRequest request);
 }

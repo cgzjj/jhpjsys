@@ -123,8 +123,10 @@ public class ContainerManager extends AbsContainerManager {
      * @author yuanyc
      */
     public synchronized Queue pullQueueing() {
+        Queue queuing = queue.remove(0);
+
         queueListener.onUpdate(queue);
-        return queue.remove(0);
+        return queuing;
     }
 
     /**
@@ -137,8 +139,9 @@ public class ContainerManager extends AbsContainerManager {
         if (index == -1) {
             return null;
         }
+        Queue queuing = queue.remove(index);
         queueListener.onUpdate(queue);
-        return queue.remove(index);
+        return queuing;
     }
 
     /**

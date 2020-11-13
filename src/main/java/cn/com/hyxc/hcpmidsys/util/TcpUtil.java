@@ -63,51 +63,36 @@ public class TcpUtil {
      * @param qhxxlh
      * @return
      */
-    public static void receiverTcp(Integer port,String qhxxlh){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                InputStream in = null;
-                ServerSocket serverSocket = null;
-                Socket socket = null;
-                try {
-                    serverSocket = new ServerSocket(port);
-                    socket = serverSocket.accept();
-                    in = socket.getInputStream();
-                    byte[] bytes = new byte[1024];
-                    int len = in.read(bytes);
-                    int pjlb = 1;
-                    int pjjg = len;
-                    if (len == 5){
-                        pjlb = 2;
-                        pjjg = 1;
-                    }
-                    String url = "http://192.168.101.103:8080/queue";
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("qhxxlh",qhxxlh);
-                    jsonObject.put("pjlb",pjlb);
-                    jsonObject.put("pjjg",pjjg);
-                    JSONObject json = new JSONObject();
-                    json.put("respData",jsonObject);
-                    HttpUtil.sendHttp("192.168.101.111:8080/queue",json.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }finally {
-                    try {
-                        if(in != null){
-                            in.close();
-                        }
-                        if(socket != null){
-                            socket.close();
-                        }
-                        if(serverSocket != null){
-                            serverSocket.close();
-                        }
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
+    public static int receiverTcp(Integer port,String qhxxlh){
+        int msg = 0;
+        InputStream in = null;
+        ServerSocket serverSocket = null;
+        Socket socket = null;
+        try {
+            serverSocket = new ServerSocket(port);
+            socket = serverSocket.accept();
+            in = socket.getInputStream();
+            byte[] bytes = new byte[1024];
+            int len = in.read(bytes);
+            msg = len;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                if (in != null) {
+                    in.close();
                 }
+                if (socket != null) {
+                    socket.close();
+                }
+                if (serverSocket != null) {
+                    serverSocket.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }).start();
+        }
+        return msg;
     }
+
 }

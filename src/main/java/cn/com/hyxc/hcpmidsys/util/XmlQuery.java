@@ -131,16 +131,17 @@ public class XmlQuery {
     /**
      *  加密 base64
      */
-    public static String encoder(String xmlInfo) {
-        byte[] bytes=xmlInfo.getBytes();
+    public static String encoder(String str) {
+        byte[] bytes=str.getBytes();
         String base64keyString =new BASE64Encoder().encodeBuffer(bytes);
         return base64keyString;
     }
+
     /**
      *  解密 base64
      */
-    public static String decoder(String xmlInfo) throws IOException {
-        byte[] bt = (new BASE64Decoder()).decodeBuffer(xmlInfo);
+    public static String decoder(String str) throws IOException {
+        byte[] bt = (new BASE64Decoder()).decodeBuffer(str);
         String key=new String(bt);
         return key;
     }

@@ -26,7 +26,7 @@ import java.util.*;
 @Service
 public class RequestServiceImpl implements RequestService {
 
-    private static   Map<String,Object> handlerMap = new HashMap<String,Object>(){
+    /*private static   Map<String,Object> handlerMap = new HashMap<String,Object>(){
         {
             //叫号请求处理
             put("TMRI_CALLOUT", new RequestServiceImpl.CallOutHandler());
@@ -43,7 +43,7 @@ public class RequestServiceImpl implements RequestService {
             //待领取牌证信息写入请求处理
             put("TMRI_RECEIVE", new RequestServiceImpl.ReceiveHandler());
         }
-    };
+    };*/
 
     @Autowired
     private ContainerManager containerManager;
@@ -51,25 +51,26 @@ public class RequestServiceImpl implements RequestService {
     /**
      * 处理请求
      * @param request
-     * @param json
      * @return
      */
     @Override
-    public JSONObject ProcessingRequests(HttpServletRequest request,String json) {
+    public JSONObject ProcessingRequests(HttpServletRequest request) {
+        String json = request.getParameter("reqdata");
         JSONObject jsonObject = null;
+        JSONObject data = null;
         try {
-            jsonObject = JSONObject.parseObject(json);
+            data = JSONObject.parseObject(json);
         } catch (ClassCastException e){
             e.printStackTrace();
         }
-        JSONObject data = jsonObject.getJSONObject("respData");
-        if (data == null){
+        //JSONObject data = jsonObject.getJSONObject("respData");
+        /*if (data == null){
             return null;
-        }
+        }*/
         JSONObject result = null;
-        Handler handler = (Handler)handlerMap.get(request.getParameter("onType"));
-        result = handler.execute(data);
-        /*if (("TMRI_CALLOUT").equals(request.getParameter("onType"))){
+        /*Handler handler = (Handler)handlerMap.get(request.getParameter("onType"));
+        result = handler.execute(data);*/
+        if (("TMRI_CALLOUT").equals(request.getParameter("onType"))){
             //叫号请求处理
             result = callRequest(data);
         } else if (("TMRI_RECALL").equals(request.getParameter("onType"))){
@@ -86,7 +87,7 @@ public class RequestServiceImpl implements RequestService {
             //恢复叫号请求处理
         } else if (("TMRI_RECEIVE").equals(request.getParameter("onType"))){
             //待领取牌证信息写入请求处理
-        }*/
+        }
         return result;
     }
 
@@ -146,7 +147,7 @@ public class RequestServiceImpl implements RequestService {
         } else {
             //业务窗口上方显示屏中显示“恢复受理”
         }
-        int s = TcpUtil.senderTcp("172.0.0.1",5000,msg);
+        int s = TcpUtil.senderTcp("192.168.101.108",8024,msg);
         if (s == 2){
             JSONObject writeData = new JSONObject();
             writeData.put("code",s);
@@ -180,7 +181,7 @@ public class RequestServiceImpl implements RequestService {
         ControlComputer selectControlComputer = getComputerByQhxxxlh(qhxxxlh);
         //提请评价
         String msg = "S02";
-        int s = TcpUtil.senderTcp("172.0.0.1",5000,msg);
+        int s = TcpUtil.senderTcp("192.168.101.108",8024,msg);
 
         if (s == 2){
             JSONObject writeData = new JSONObject();
@@ -206,7 +207,7 @@ public class RequestServiceImpl implements RequestService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                int msg = TcpUtil.receiverTcp(8080,qhxxxlh);
+                int msg = TcpUtil.receiverTcp(8777,qhxxxlh);
                 handleGetMessage(msg,qhxxxlh);
             }
         }).start();
@@ -327,6 +328,11 @@ public class RequestServiceImpl implements RequestService {
      * @return
      */
     private JSONObject callRequest(JSONObject data){
+        System.out.println("xxx");
+        if (data == null){
+            return null;
+        }
+        //String ywckjsjip = "192.168.0.1";
         String ywckjsjip = data.getString("ywckjsjip");
         //通过窗口电脑ip获取电脑备案信息
         ControlComputer selectControlComputer = getComputerByIp(ywckjsjip);
@@ -389,7 +395,7 @@ public class RequestServiceImpl implements RequestService {
         writeData.put("jzzply",selectQueue.getJzzply());
         writeData.put("jzbdzp",selectQueue.getJzbdzp());
         writeData.put("xczp",selectQueue.getXczp());
-        JSONObject result = writeMessage(100,"叫号成功",writeData);
+        JSONObject result = writeMessage(200,"叫号成功",writeData);
         return result;
     }
 
@@ -458,7 +464,7 @@ public class RequestServiceImpl implements RequestService {
         return selectControlComputer;
     }
 
-    static class CallOutHandler implements Handler {
+    /*static class CallOutHandler implements Handler {
         @Override
         public JSONObject execute(JSONObject data) {
             return new RequestServiceImpl().callRequest(data);
@@ -466,6 +472,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     static class ReCallHandler implements Handler {
+
         @Override
         public JSONObject execute(JSONObject data) {
             return new RequestServiceImpl().reCallRequest(data);
@@ -504,5 +511,5 @@ public class RequestServiceImpl implements RequestService {
         public JSONObject execute(JSONObject data) {
             return new RequestServiceImpl().receiveRequest(data);
         }
-    }
+    }*/
 }

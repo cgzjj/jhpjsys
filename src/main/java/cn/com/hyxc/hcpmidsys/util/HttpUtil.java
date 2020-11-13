@@ -1,7 +1,7 @@
 package cn.com.hyxc.hcpmidsys.util;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -15,6 +15,35 @@ import java.net.URLConnection;
  */
 public class HttpUtil {
 
+    public void send(String str,String json){
+        URL url = null;
+        try {
+            url = new URL(str);
+            URLConnection con = url.openConnection();
+            // post请求必须设置下面两项
+            con.setDoOutput(true);
+            con.setDoInput(true);
+            // 不使用缓存
+            con.setUseCaches(false);
+            con.setConnectTimeout(1500);
+            // 这句是打开链接
+            OutputStream out = con.getOutputStream();
+
+            out.write("onType=TMRI_CALLOUT".getBytes());
+
+            // 把数据写到报文;
+            out.write((json).getBytes());
+            out.flush();
+            out.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void main(String[] args) {
+        new HttpUtil().send("http://localhost:8081/queue","12345");
+    }
 
     /**
      * 发送请求
