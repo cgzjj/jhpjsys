@@ -4,7 +4,6 @@ import cn.com.hyxc.hcpmidsys.modulehttp.service.RequestService;
 import cn.com.hyxc.hcpmidsys.util.RequestJsonUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
