@@ -1,12 +1,9 @@
 package cn.com.hyxc.hcpmidsys.util;
 
-import com.alibaba.fastjson.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
