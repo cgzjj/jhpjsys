@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 容器管理器
@@ -26,6 +26,21 @@ public class ContainerManager extends AbsContainerManager {
     private Vector<Queue> queue;
 
     private Vector<ControlComputer> controlComputers;
+
+    private ConcurrentHashMap<String, Integer> lastIntGroupByYwlb = new ConcurrentHashMap<String, Integer>() {
+        {
+            put("01", 0);
+            put("02", 0);
+            put("04", 0);
+        }
+
+        @Override
+        public Integer get(Object key) {
+            Integer value = super.get(key);
+            super.put(String.valueOf(key), ++ value);
+            return value;
+        }
+    };
 
     private ContainerManager() {
         queue = new Vector<>();
@@ -71,11 +86,12 @@ public class ContainerManager extends AbsContainerManager {
      * @param queuinng
      */
     @Override
-    public synchronized Queue onAddNewQueue(List<Queue> queue,Queue queuinng) {
+    public synchronized Queue onAddNewQueue(List<Queue> queue, Queue queuinng) {
         super.onAddNewQueue(queue, queuinng);
         Queue newQueuing = queue.get(queue.indexOf(queuinng));
-        String pdh = newQueuing.setPdh("xxxxxx");
-        newQueuing.setQhxxxlh(new SimpleDateFormat("yyMMdd").format(System.currentTimeMillis())+"8888888888"+pdh);
+        String ywlb = newQueuing.getYwlb();
+        String pdh = newQueuing.setPdh(ywlb + String.format("%04d", lastIntGroupByYwlb.get(ywlb)));
+        newQueuing.setQhxxxlh(new SimpleDateFormat("yyMMdd").format(System.currentTimeMillis()) + "8888888888" + pdh);
         return newQueuing;
     }
 
@@ -124,7 +140,6 @@ public class ContainerManager extends AbsContainerManager {
      */
     public synchronized Queue pullQueueing() {
         Queue queuing = queue.remove(0);
-
         queueListener.onUpdate(queue);
         return queuing;
     }
@@ -162,7 +177,7 @@ public class ContainerManager extends AbsContainerManager {
         return null;
     }
 
-    public synchronized Queue pullQueuingByQhxxxlh(String qhxxxlh){
+    public synchronized Queue pullQueuingByQhxxxlh(String qhxxxlh) {
         for (Queue queueing : queue
         ) {
             if (qhxxxlh.equals(queueing.getQhxxxlh())) {
@@ -246,15 +261,14 @@ public class ContainerManager extends AbsContainerManager {
      *
      * @author yuanyc
      */
-     public synchronized boolean updateQueuingInComputers(String uuid,Queue queuing){
-         for (ControlComputer computer :
-                 controlComputers) {
-             if (uuid.equals(computer.getUuid())) {
-                 computer.setQueuing(queuing);
-                 return true;
-             }
-         }
-         return false;
-     }
-
+    public synchronized boolean updateQueuingInComputers(String uuid, Queue queuing) {
+        for (ControlComputer computer :
+                controlComputers) {
+            if (uuid.equals(computer.getUuid())) {
+                computer.setQueuing(queuing);
+                return true;
+            }
+        }
+        return false;
+    }
 }
