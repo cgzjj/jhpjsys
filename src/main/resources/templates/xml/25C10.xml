@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <queue>
+        <!-- 设备控制计算机 -->
+        <sbkzjsjbh>8888880001</sbkzjsjbh>
+        <!-- 计算机类别 -->
+        <jsjlb>1</jsjlb>
+        <!-- 计算机ip -->
+        <jsjip>192.168.0.1</jsjip>
+        <!-- 窗口编号 -->
+        <ckbh>01</ckbh>
+        <!-- 可办业务类别 -->
+        <kbywlb>01</kbywlb>
+    </queue>
+    <queue>
+        <!-- 设备控制计算机 -->
+        <sbkzjsjbh>8888880001</sbkzjsjbh>
+        <!-- 计算机类别 -->
+        <jsjlb>1</jsjlb>
+        <!-- 计算机ip -->
+        <jsjip>192.168.0.2</jsjip>
+        <!-- 窗口编号 -->
+        <ckbh>02</ckbh>
+        <!-- 可办业务类别 -->
+        <kbywlb>01</kbywlb>
+    </queue>
+    <queue>
+        <!-- 设备控制计算机 -->
+        <sbkzjsjbh>8888880001</sbkzjsjbh>
+        <!-- 计算机类别 -->
+        <jsjlb>1</jsjlb>
+        <!-- 计算机ip -->
+        <jsjip>192.168.0.3</jsjip>
+        <!-- 窗口编号 -->
+        <ckbh>03</ckbh>
+        <!-- 可办业务类别 -->
+        <kbywlb>01</kbywlb>
+    </queue>
+</root>

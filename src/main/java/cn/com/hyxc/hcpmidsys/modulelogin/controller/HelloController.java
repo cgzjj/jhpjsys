@@ -1,16 +1,18 @@
 package cn.com.hyxc.hcpmidsys.modulelogin.controller;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
+import cn.com.hyxc.hcpmidsys.container.ContainerManager;
+import cn.com.hyxc.hcpmidsys.container.ControlComputer;
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @Description: TODO
@@ -19,6 +21,9 @@ import java.util.Collection;
  */
 @RestController
 public class HelloController {
+
+    @Autowired
+    private ContainerManager containerManager;
 
     @GetMapping("/test")
     public String test(Model model){
@@ -65,7 +70,12 @@ public class HelloController {
 
     @GetMapping("/admin/hello")
     public String hello2(){
+        List<ControlComputer> controlComputers = containerManager.getControlComputers();
+        System.out.println(controlComputers);
 
+        ControlComputer computer = controlComputers.get(0);
+        containerManager.updateComputerStatus(computer.getUuid(),"1");
+        System.out.println(containerManager.getControlComputers());
         return "admin";
     }
 

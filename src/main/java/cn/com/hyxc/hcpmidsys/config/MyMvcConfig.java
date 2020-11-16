@@ -29,6 +29,7 @@ public class MyMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/demo_login").setViewName("login/demo_login");
         registry.addViewController("/user/hello").setViewName("hello");//业务办理界面
         registry.addViewController("/user/business").setViewName("business");//业务办理界面
+        registry.addViewController("/xml/25C10").setViewName("xml/25C10.xml");
     }
 
 
